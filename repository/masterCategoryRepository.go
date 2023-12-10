@@ -10,6 +10,7 @@ type MasterCategoryRepostoryInterface interface {
 	ReadMasterCategory() ([]model.MasterCategory, error)
 	UpdateMasterCategory(id int, request *model.MasterCategory) error
 	ReadDetailMasterCategory(id int) ([]model.MasterCategory, error)
+	DeleteMasterCategory(id int) error
 }
 
 func (repo *repository) CreateMasterCategory(request *model.MasterCategory) ([]model.MasterCategory, error) {
@@ -43,4 +44,13 @@ func (repo *repository) ReadDetailMasterCategory(id int) ([]model.MasterCategory
 	error := repo.db.Table("master_category").Where("id = ?", id).Find(&master_category).Error
 
 	return master_category, error
+}
+
+func (repo *repository) DeleteMasterCategory(id int) error {
+	var master_category []model.MasterCategory
+
+	query := fmt.Sprintf("UPDATE master_category SET is_active = 0 WHERE id = %d", id)
+	error := repo.db.Raw(query).Scan(&master_category).Error
+
+	return error
 }

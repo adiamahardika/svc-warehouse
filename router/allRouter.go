@@ -40,6 +40,7 @@ func AllRouter(db *gorm.DB) {
 			masterCategory.POST("/", masterController.CreateMasterCategory)
 			masterCategory.GET("/", masterController.ReadMasterCategory)
 			masterCategory.PATCH("/:id", masterController.UpdateMasterCategory)
+			masterCategory.DELETE("/:id", masterController.DeleteMasterCategory)
 		}
 	}
 

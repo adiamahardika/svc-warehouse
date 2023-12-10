@@ -10,6 +10,7 @@ type MasterCategoryServiceInterface interface {
 	CreateMasterCategory(request *model.MasterCategory) ([]model.MasterCategory, error)
 	ReadMasterCategory() ([]model.MasterCategory, error)
 	UpdateMasterCategory(id int, request *model.MasterCategory) ([]model.MasterCategory, error)
+	DeleteMasterCategory(id int) error
 }
 
 type masterCategoryService struct {
@@ -53,4 +54,11 @@ func (service *masterCategoryService) UpdateMasterCategory(id int, request *mode
 	}
 
 	return masterCategory, error
+}
+
+func (service *masterCategoryService) DeleteMasterCategory(id int) error {
+
+	error := service.repository.DeleteMasterCategory(id)
+
+	return error
 }
