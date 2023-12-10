@@ -31,16 +31,24 @@ func AllRouter(db *gorm.DB) {
 	repository := repository.Repository(db)
 
 	masterCategoryService := service.MasterCategoryService(repository)
-	masterController := controller.MasterCategoryController(masterCategoryService)
+	masterCategoryController := controller.MasterCategoryController(masterCategoryService)
+
+	masterProductService := service.MasterProductService(repository)
+	masterProductController := controller.MasterProductController(masterProductService)
 
 	root := router.Group("/")
 	{
 		masterCategory := root.Group("/master-category")
 		{
-			masterCategory.POST("/", masterController.CreateMasterCategory)
-			masterCategory.GET("/", masterController.ReadMasterCategory)
-			masterCategory.PATCH("/:id", masterController.UpdateMasterCategory)
-			masterCategory.DELETE("/:id", masterController.DeleteMasterCategory)
+			masterCategory.POST("/", masterCategoryController.CreateMasterCategory)
+			masterCategory.GET("/", masterCategoryController.ReadMasterCategory)
+			masterCategory.PATCH("/:id", masterCategoryController.UpdateMasterCategory)
+			masterCategory.DELETE("/:id", masterCategoryController.DeleteMasterCategory)
+		}
+
+		masterProduct := root.Group("/master-product")
+		{
+			masterProduct.POST("/", masterProductController.CreateMasterProduct)
 		}
 	}
 
