@@ -76,3 +76,41 @@ func (controller *masterCategoryController) CreateMasterCategory(context *gin.Co
 		}
 	}
 }
+
+func (controller *masterCategoryController) ReadMasterCategory(context *gin.Context) {
+
+	description := []string{}
+	http_status := http.StatusOK
+	var standardResponse *model.StandardResponse
+
+	master_category, error := controller.masterCategoryService.ReadMasterCategory()
+
+	if error == nil {
+
+		description = append(description, "Success")
+		http_status = http.StatusOK
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  http_status,
+			Description: description,
+		}
+		context.JSON(http_status, model.MasterCategoryResponse{
+			StandardResponse: *standardResponse,
+			Result:           master_category,
+		})
+
+	} else {
+
+		description = append(description, error.Error())
+		http_status = http.StatusBadRequest
+
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  http_status,
+			Description: description,
+		}
+		context.JSON(http_status, model.MasterCategoryResponse{
+			StandardResponse: *standardResponse,
+			Result:           master_category,
+		})
+
+	}
+}

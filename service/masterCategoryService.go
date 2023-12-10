@@ -8,6 +8,7 @@ import (
 
 type MasterCategoryServiceInterface interface {
 	CreateMasterCategory(request *model.MasterCategory) ([]model.MasterCategory, error)
+	ReadMasterCategory() ([]model.MasterCategory, error)
 }
 
 type masterCategoryService struct {
@@ -25,6 +26,13 @@ func (service *masterCategoryService) CreateMasterCategory(request *model.Master
 	request.IsActive = 1
 
 	masterCategory, error := service.repository.CreateMasterCategory(request)
+
+	return masterCategory, error
+}
+
+func (service *masterCategoryService) ReadMasterCategory() ([]model.MasterCategory, error) {
+
+	masterCategory, error := service.repository.ReadMasterCategory()
 
 	return masterCategory, error
 }

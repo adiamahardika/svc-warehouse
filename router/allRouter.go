@@ -38,6 +38,7 @@ func AllRouter(db *gorm.DB) {
 		masterCategory := root.Group("/master-category")
 		{
 			masterCategory.POST("/", masterController.CreateMasterCategory)
+			masterCategory.GET("/", masterController.ReadMasterCategory)
 		}
 	}
 
