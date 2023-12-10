@@ -9,6 +9,7 @@ import (
 type MasterCategoryServiceInterface interface {
 	CreateMasterCategory(request *model.MasterCategory) ([]model.MasterCategory, error)
 	ReadMasterCategory() ([]model.MasterCategory, error)
+	UpdateMasterCategory(id int, request *model.MasterCategory) ([]model.MasterCategory, error)
 }
 
 type masterCategoryService struct {
@@ -33,6 +34,23 @@ func (service *masterCategoryService) CreateMasterCategory(request *model.Master
 func (service *masterCategoryService) ReadMasterCategory() ([]model.MasterCategory, error) {
 
 	masterCategory, error := service.repository.ReadMasterCategory()
+
+	return masterCategory, error
+}
+
+func (service *masterCategoryService) UpdateMasterCategory(id int, request *model.MasterCategory) ([]model.MasterCategory, error) {
+	now := time.Now()
+	request.UpdatedAt = now
+	masterCategory := []model.MasterCategory{}
+
+	error := service.repository.UpdateMasterCategory(id, request)
+	if error == nil {
+
+		masterCategory, error = service.repository.ReadDetailMasterCategory(id)
+		if error == nil {
+			return masterCategory, error
+		}
+	}
 
 	return masterCategory, error
 }
