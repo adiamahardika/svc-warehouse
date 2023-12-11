@@ -49,6 +49,7 @@ func AllRouter(db *gorm.DB) {
 		masterProduct := root.Group("/master-product")
 		{
 			masterProduct.POST("/", masterProductController.CreateMasterProduct)
+			masterProduct.GET("/", masterProductController.ReadMasterProduct)
 		}
 	}
 

@@ -76,3 +76,41 @@ func (controller *masterProductController) CreateMasterProduct(context *gin.Cont
 		}
 	}
 }
+
+func (controller *masterProductController) ReadMasterProduct(context *gin.Context) {
+
+	description := []string{}
+	http_status := http.StatusOK
+	var standardResponse *model.StandardResponse
+
+	master_product, error := controller.masterProductService.ReadMasterProduct()
+
+	if error == nil {
+
+		description = append(description, "Success")
+		http_status = http.StatusOK
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  http_status,
+			Description: description,
+		}
+		context.JSON(http_status, model.MasterProductResponse{
+			StandardResponse: *standardResponse,
+			Result:           master_product,
+		})
+
+	} else {
+
+		description = append(description, error.Error())
+		http_status = http.StatusBadRequest
+
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  http_status,
+			Description: description,
+		}
+		context.JSON(http_status, model.MasterProductResponse{
+			StandardResponse: *standardResponse,
+			Result:           master_product,
+		})
+
+	}
+}

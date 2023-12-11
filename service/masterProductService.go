@@ -8,6 +8,7 @@ import (
 
 type MasterProductServiceInterface interface {
 	CreateMasterProduct(request *model.MasterProduct) ([]model.MasterProduct, error)
+	ReadMasterProduct() ([]model.MasterProduct, error)
 }
 
 type masterProductService struct {
@@ -25,6 +26,13 @@ func (service *masterProductService) CreateMasterProduct(request *model.MasterPr
 	request.IsActive = 1
 
 	masterProduct, error := service.repository.CreateMasterProduct(request)
+
+	return masterProduct, error
+}
+
+func (service *masterProductService) ReadMasterProduct() ([]model.MasterProduct, error) {
+
+	masterProduct, error := service.repository.ReadMasterProduct()
 
 	return masterProduct, error
 }
