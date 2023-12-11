@@ -36,6 +36,9 @@ func AllRouter(db *gorm.DB) {
 	masterProductService := service.MasterProductService(repository)
 	masterProductController := controller.MasterProductController(masterProductService)
 
+	productStatusService := service.ProductStatusService(repository)
+	productStatusController := controller.ProductStatusController(productStatusService)
+
 	root := router.Group("/")
 	{
 		masterCategory := root.Group("/master-category")
@@ -52,6 +55,14 @@ func AllRouter(db *gorm.DB) {
 			masterProduct.GET("/", masterProductController.ReadMasterProduct)
 			masterProduct.PUT("/:id", masterProductController.UpdateMasterProduct)
 			masterProduct.DELETE("/:id", masterProductController.DeleteMasterProduct)
+		}
+
+		productStatus := root.Group("/product-status")
+		{
+			productStatus.POST("/", productStatusController.CreateProductStatus)
+			productStatus.GET("/", productStatusController.ReadProductStatus)
+			productStatus.PUT("/:id", productStatusController.UpdateProductStatus)
+			productStatus.DELETE("/:id", productStatusController.DeleteProductStatus)
 		}
 	}
 

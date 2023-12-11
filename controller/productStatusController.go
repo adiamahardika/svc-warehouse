@@ -11,17 +11,17 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type masterCategoryController struct {
-	masterCategoryService service.MasterCategoryServiceInterface
+type productStatusController struct {
+	productStatusService service.ProductStatusServiceInterface
 }
 
-func MasterCategoryController(masterCategoryService service.MasterCategoryServiceInterface) *masterCategoryController {
-	return &masterCategoryController{masterCategoryService}
+func ProductStatusController(productStatusService service.ProductStatusServiceInterface) *productStatusController {
+	return &productStatusController{productStatusService}
 }
 
-func (controller *masterCategoryController) CreateMasterCategory(context *gin.Context) {
+func (controller *productStatusController) CreateProductStatus(context *gin.Context) {
 
-	var request *model.MasterCategory
+	var request *model.ProductStatus
 
 	error := context.ShouldBind(&request)
 	description := []string{}
@@ -40,13 +40,13 @@ func (controller *masterCategoryController) CreateMasterCategory(context *gin.Co
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.MasterCategoryResponse{
+		context.JSON(httpStatus, model.ProductStatusResponse{
 			StandardResponse: *standardResponse,
 		})
 
 	} else {
 
-		masterCategory, error := controller.masterCategoryService.CreateMasterCategory(request)
+		productStatus, error := controller.productStatusService.CreateProductStatus(request)
 
 		if error == nil {
 
@@ -56,9 +56,9 @@ func (controller *masterCategoryController) CreateMasterCategory(context *gin.Co
 				HttpStatus:  httpStatus,
 				Description: description,
 			}
-			context.JSON(httpStatus, model.MasterCategoryResponse{
+			context.JSON(httpStatus, model.ProductStatusResponse{
 				StandardResponse: *standardResponse,
-				Result:           masterCategory,
+				Result:           productStatus,
 			})
 
 		} else {
@@ -70,21 +70,21 @@ func (controller *masterCategoryController) CreateMasterCategory(context *gin.Co
 				HttpStatus:  httpStatus,
 				Description: description,
 			}
-			context.JSON(httpStatus, model.MasterCategoryResponse{
+			context.JSON(httpStatus, model.ProductStatusResponse{
 				StandardResponse: *standardResponse,
-				Result:           masterCategory,
+				Result:           productStatus,
 			})
 		}
 	}
 }
 
-func (controller *masterCategoryController) ReadMasterCategory(context *gin.Context) {
+func (controller *productStatusController) ReadProductStatus(context *gin.Context) {
 
 	description := []string{}
 	httpStatus := http.StatusOK
 	var standardResponse *model.StandardResponse
 
-	masterCategory, error := controller.masterCategoryService.ReadMasterCategory()
+	productStatus, error := controller.productStatusService.ReadProductStatus()
 
 	if error == nil {
 
@@ -94,9 +94,9 @@ func (controller *masterCategoryController) ReadMasterCategory(context *gin.Cont
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.MasterCategoryResponse{
+		context.JSON(httpStatus, model.ProductStatusResponse{
 			StandardResponse: *standardResponse,
-			Result:           masterCategory,
+			Result:           productStatus,
 		})
 
 	} else {
@@ -108,15 +108,15 @@ func (controller *masterCategoryController) ReadMasterCategory(context *gin.Cont
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.MasterCategoryResponse{
+		context.JSON(httpStatus, model.ProductStatusResponse{
 			StandardResponse: *standardResponse,
-			Result:           masterCategory,
+			Result:           productStatus,
 		})
 
 	}
 }
 
-func (controller *masterCategoryController) UpdateMasterCategory(context *gin.Context) {
+func (controller *productStatusController) UpdateProductStatus(context *gin.Context) {
 
 	description := []string{}
 	httpStatus := http.StatusOK
@@ -135,13 +135,13 @@ func (controller *masterCategoryController) UpdateMasterCategory(context *gin.Co
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.MasterCategoryResponse{
+		context.JSON(httpStatus, model.ProductStatusResponse{
 			StandardResponse: *standardResponse,
 		})
 
 	}
 
-	var request *model.MasterCategory
+	var request *model.ProductStatus
 	error = context.ShouldBind(&request)
 
 	if error != nil {
@@ -156,13 +156,13 @@ func (controller *masterCategoryController) UpdateMasterCategory(context *gin.Co
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.MasterCategoryResponse{
+		context.JSON(httpStatus, model.ProductStatusResponse{
 			StandardResponse: *standardResponse,
 		})
 
 	} else {
 
-		masterCategory, error := controller.masterCategoryService.UpdateMasterCategory(id, request)
+		productStatus, error := controller.productStatusService.UpdateProductStatus(id, request)
 
 		if error == nil {
 
@@ -172,9 +172,9 @@ func (controller *masterCategoryController) UpdateMasterCategory(context *gin.Co
 				HttpStatus:  httpStatus,
 				Description: description,
 			}
-			context.JSON(httpStatus, model.MasterCategoryResponse{
+			context.JSON(httpStatus, model.ProductStatusResponse{
 				StandardResponse: *standardResponse,
-				Result:           masterCategory,
+				Result:           productStatus,
 			})
 
 		} else {
@@ -186,15 +186,15 @@ func (controller *masterCategoryController) UpdateMasterCategory(context *gin.Co
 				HttpStatus:  httpStatus,
 				Description: description,
 			}
-			context.JSON(httpStatus, model.MasterCategoryResponse{
+			context.JSON(httpStatus, model.ProductStatusResponse{
 				StandardResponse: *standardResponse,
-				Result:           masterCategory,
+				Result:           productStatus,
 			})
 		}
 	}
 }
 
-func (controller *masterCategoryController) DeleteMasterCategory(context *gin.Context) {
+func (controller *productStatusController) DeleteProductStatus(context *gin.Context) {
 
 	description := []string{}
 	httpStatus := http.StatusOK
@@ -213,13 +213,13 @@ func (controller *masterCategoryController) DeleteMasterCategory(context *gin.Co
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.MasterCategoryResponse{
+		context.JSON(httpStatus, model.ProductStatusResponse{
 			StandardResponse: *standardResponse,
 		})
 
 	}
 
-	error = controller.masterCategoryService.DeleteMasterCategory(id)
+	error = controller.productStatusService.DeleteProductStatus(id)
 
 	if error == nil {
 
@@ -229,7 +229,7 @@ func (controller *masterCategoryController) DeleteMasterCategory(context *gin.Co
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.MasterCategoryResponse{
+		context.JSON(httpStatus, model.ProductStatusResponse{
 			StandardResponse: *standardResponse,
 		})
 
@@ -242,7 +242,7 @@ func (controller *masterCategoryController) DeleteMasterCategory(context *gin.Co
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.MasterCategoryResponse{
+		context.JSON(httpStatus, model.ProductStatusResponse{
 			StandardResponse: *standardResponse,
 		})
 	}
