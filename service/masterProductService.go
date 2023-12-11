@@ -9,6 +9,7 @@ import (
 type MasterProductServiceInterface interface {
 	CreateMasterProduct(request *model.MasterProduct) ([]model.MasterProduct, error)
 	ReadMasterProduct() ([]model.MasterProduct, error)
+	UpdateMasterProduct(id int, request *model.MasterProduct) ([]model.MasterProduct, error)
 }
 
 type masterProductService struct {
@@ -33,6 +34,23 @@ func (service *masterProductService) CreateMasterProduct(request *model.MasterPr
 func (service *masterProductService) ReadMasterProduct() ([]model.MasterProduct, error) {
 
 	masterProduct, error := service.repository.ReadMasterProduct()
+
+	return masterProduct, error
+}
+
+func (service *masterProductService) UpdateMasterProduct(id int, request *model.MasterProduct) ([]model.MasterProduct, error) {
+	now := time.Now()
+	request.UpdatedAt = now
+	masterProduct := []model.MasterProduct{}
+
+	error := service.repository.UpdateMasterProduct(id, request)
+	if error == nil {
+
+		masterProduct, error = service.repository.ReadDetailMasterProduct(id)
+		if error == nil {
+			return masterProduct, error
+		}
+	}
 
 	return masterProduct, error
 }

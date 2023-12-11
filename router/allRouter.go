@@ -42,7 +42,7 @@ func AllRouter(db *gorm.DB) {
 		{
 			masterCategory.POST("/", masterCategoryController.CreateMasterCategory)
 			masterCategory.GET("/", masterCategoryController.ReadMasterCategory)
-			masterCategory.PATCH("/:id", masterCategoryController.UpdateMasterCategory)
+			masterCategory.PUT("/:id", masterCategoryController.UpdateMasterCategory)
 			masterCategory.DELETE("/:id", masterCategoryController.DeleteMasterCategory)
 		}
 
@@ -50,6 +50,7 @@ func AllRouter(db *gorm.DB) {
 		{
 			masterProduct.POST("/", masterProductController.CreateMasterProduct)
 			masterProduct.GET("/", masterProductController.ReadMasterProduct)
+			masterProduct.PUT("/:id", masterProductController.UpdateMasterProduct)
 		}
 	}
 

@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"svc-warehouse/model"
 	"svc-warehouse/service"
 
@@ -24,7 +25,7 @@ func (controller *masterProductController) CreateMasterProduct(context *gin.Cont
 
 	error := context.ShouldBind(&request)
 	description := []string{}
-	http_status := http.StatusOK
+	httpStatus := http.StatusOK
 	var standardResponse *model.StandardResponse
 
 	if error != nil {
@@ -34,44 +35,44 @@ func (controller *masterProductController) CreateMasterProduct(context *gin.Cont
 			description = append(description, errorMessage)
 		}
 
-		http_status = http.StatusBadRequest
+		httpStatus = http.StatusBadRequest
 		standardResponse = &model.StandardResponse{
-			HttpStatus:  http_status,
+			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(http_status, model.MasterProductResponse{
+		context.JSON(httpStatus, model.MasterProductResponse{
 			StandardResponse: *standardResponse,
 		})
 
 	} else {
 
-		master_Product, error := controller.masterProductService.CreateMasterProduct(request)
+		masterProduct, error := controller.masterProductService.CreateMasterProduct(request)
 
 		if error == nil {
 
 			description = append(description, "Success")
-			http_status = http.StatusOK
+			httpStatus = http.StatusOK
 			standardResponse = &model.StandardResponse{
-				HttpStatus:  http_status,
+				HttpStatus:  httpStatus,
 				Description: description,
 			}
-			context.JSON(http_status, model.MasterProductResponse{
+			context.JSON(httpStatus, model.MasterProductResponse{
 				StandardResponse: *standardResponse,
-				Result:           master_Product,
+				Result:           masterProduct,
 			})
 
 		} else {
 
 			description = append(description, error.Error())
-			http_status = http.StatusBadRequest
+			httpStatus = http.StatusBadRequest
 
 			standardResponse = &model.StandardResponse{
-				HttpStatus:  http_status,
+				HttpStatus:  httpStatus,
 				Description: description,
 			}
-			context.JSON(http_status, model.MasterProductResponse{
+			context.JSON(httpStatus, model.MasterProductResponse{
 				StandardResponse: *standardResponse,
-				Result:           master_Product,
+				Result:           masterProduct,
 			})
 		}
 	}
@@ -80,37 +81,115 @@ func (controller *masterProductController) CreateMasterProduct(context *gin.Cont
 func (controller *masterProductController) ReadMasterProduct(context *gin.Context) {
 
 	description := []string{}
-	http_status := http.StatusOK
+	httpStatus := http.StatusOK
 	var standardResponse *model.StandardResponse
 
-	master_product, error := controller.masterProductService.ReadMasterProduct()
+	masterProduct, error := controller.masterProductService.ReadMasterProduct()
 
 	if error == nil {
 
 		description = append(description, "Success")
-		http_status = http.StatusOK
+		httpStatus = http.StatusOK
 		standardResponse = &model.StandardResponse{
-			HttpStatus:  http_status,
+			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(http_status, model.MasterProductResponse{
+		context.JSON(httpStatus, model.MasterProductResponse{
 			StandardResponse: *standardResponse,
-			Result:           master_product,
+			Result:           masterProduct,
 		})
 
 	} else {
 
 		description = append(description, error.Error())
-		http_status = http.StatusBadRequest
+		httpStatus = http.StatusBadRequest
 
 		standardResponse = &model.StandardResponse{
-			HttpStatus:  http_status,
+			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(http_status, model.MasterProductResponse{
+		context.JSON(httpStatus, model.MasterProductResponse{
 			StandardResponse: *standardResponse,
-			Result:           master_product,
+			Result:           masterProduct,
 		})
 
+	}
+}
+
+func (controller *masterProductController) UpdateMasterProduct(context *gin.Context) {
+
+	description := []string{}
+	httpStatus := http.StatusOK
+	var standardResponse *model.StandardResponse
+
+	ids := context.Param("id")
+	id, error := strconv.Atoi(ids)
+
+	if error != nil {
+
+		errorMessage := "Id parameter must be an integer"
+		description = append(description, errorMessage)
+
+		httpStatus = http.StatusBadRequest
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.MasterProductResponse{
+			StandardResponse: *standardResponse,
+		})
+
+	}
+
+	var request *model.MasterProduct
+	error = context.ShouldBind(&request)
+
+	if error != nil {
+
+		for _, value := range error.(validator.ValidationErrors) {
+			errorMessage := fmt.Sprintf("Error on field %s, condition: %s", value.Field(), value.ActualTag())
+			description = append(description, errorMessage)
+		}
+
+		httpStatus = http.StatusBadRequest
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.MasterProductResponse{
+			StandardResponse: *standardResponse,
+		})
+
+	} else {
+
+		masterProduct, error := controller.masterProductService.UpdateMasterProduct(id, request)
+
+		if error == nil {
+
+			description = append(description, "Success")
+			httpStatus = http.StatusOK
+			standardResponse = &model.StandardResponse{
+				HttpStatus:  httpStatus,
+				Description: description,
+			}
+			context.JSON(httpStatus, model.MasterProductResponse{
+				StandardResponse: *standardResponse,
+				Result:           masterProduct,
+			})
+
+		} else {
+
+			description = append(description, error.Error())
+			httpStatus = http.StatusBadRequest
+
+			standardResponse = &model.StandardResponse{
+				HttpStatus:  httpStatus,
+				Description: description,
+			}
+			context.JSON(httpStatus, model.MasterProductResponse{
+				StandardResponse: *standardResponse,
+				Result:           masterProduct,
+			})
+		}
 	}
 }
