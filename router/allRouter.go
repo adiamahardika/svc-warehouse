@@ -42,6 +42,9 @@ func AllRouter(db *gorm.DB) {
 	reservationStatusService := service.ReservationStatusService(repository)
 	reservationStatusController := controller.ReservationStatusController(reservationStatusService)
 
+	roleService := service.RoleService(repository)
+	roleController := controller.RoleController(roleService)
+
 	root := router.Group("/")
 	{
 		masterCategory := root.Group("/master-category")
@@ -74,6 +77,14 @@ func AllRouter(db *gorm.DB) {
 			reservationStatus.GET("/", reservationStatusController.ReadReservationStatus)
 			reservationStatus.PUT("/:id", reservationStatusController.UpdateReservationStatus)
 			reservationStatus.DELETE("/:id", reservationStatusController.DeleteReservationStatus)
+		}
+
+		role := root.Group("/role")
+		{
+			role.POST("/", roleController.CreateRole)
+			role.GET("/", roleController.ReadRole)
+			role.PUT("/:id", roleController.UpdateRole)
+			role.DELETE("/:id", roleController.DeleteRole)
 		}
 	}
 
