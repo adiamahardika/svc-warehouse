@@ -10,6 +10,7 @@ type MasterProductServiceInterface interface {
 	CreateMasterProduct(request *model.MasterProduct) ([]model.MasterProduct, error)
 	ReadMasterProduct() ([]model.MasterProduct, error)
 	UpdateMasterProduct(id int, request *model.MasterProduct) ([]model.MasterProduct, error)
+	DeleteMasterProduct(id int) error
 }
 
 type masterProductService struct {
@@ -53,4 +54,11 @@ func (service *masterProductService) UpdateMasterProduct(id int, request *model.
 	}
 
 	return masterProduct, error
+}
+
+func (service *masterProductService) DeleteMasterProduct(id int) error {
+
+	error := service.repository.DeleteMasterProduct(id)
+
+	return error
 }

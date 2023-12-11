@@ -193,3 +193,58 @@ func (controller *masterProductController) UpdateMasterProduct(context *gin.Cont
 		}
 	}
 }
+
+func (controller *masterProductController) DeleteMasterProduct(context *gin.Context) {
+
+	description := []string{}
+	http_status := http.StatusOK
+	var standardResponse *model.StandardResponse
+
+	ids := context.Param("id")
+	id, error := strconv.Atoi(ids)
+
+	if error != nil {
+
+		errorMessage := "Id parameter must be an integer"
+		description = append(description, errorMessage)
+
+		http_status = http.StatusBadRequest
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  http_status,
+			Description: description,
+		}
+		context.JSON(http_status, model.MasterProductResponse{
+			StandardResponse: *standardResponse,
+		})
+
+	}
+
+	error = controller.masterProductService.DeleteMasterProduct(id)
+
+	if error == nil {
+
+		description = append(description, "Success")
+		http_status = http.StatusOK
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  http_status,
+			Description: description,
+		}
+		context.JSON(http_status, model.MasterProductResponse{
+			StandardResponse: *standardResponse,
+		})
+
+	} else {
+
+		description = append(description, error.Error())
+		http_status = http.StatusBadRequest
+
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  http_status,
+			Description: description,
+		}
+		context.JSON(http_status, model.MasterProductResponse{
+			StandardResponse: *standardResponse,
+		})
+	}
+
+}

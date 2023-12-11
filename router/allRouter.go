@@ -51,6 +51,7 @@ func AllRouter(db *gorm.DB) {
 			masterProduct.POST("/", masterProductController.CreateMasterProduct)
 			masterProduct.GET("/", masterProductController.ReadMasterProduct)
 			masterProduct.PUT("/:id", masterProductController.UpdateMasterProduct)
+			masterProduct.DELETE("/:id", masterProductController.DeleteMasterProduct)
 		}
 	}
 

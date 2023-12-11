@@ -10,6 +10,7 @@ type MasterProductRepostoryInterface interface {
 	ReadMasterProduct() ([]model.MasterProduct, error)
 	UpdateMasterProduct(id int, request *model.MasterProduct) error
 	ReadDetailMasterProduct(id int) ([]model.MasterProduct, error)
+	DeleteMasterProduct(id int) error
 }
 
 func (repo *repository) CreateMasterProduct(request *model.MasterProduct) ([]model.MasterProduct, error) {
@@ -42,4 +43,13 @@ func (repo *repository) ReadDetailMasterProduct(id int) ([]model.MasterProduct, 
 	error := repo.db.Table("master_product").Select("master_product.*, master_category.name AS category").Joins("LEFT JOIN master_category on master_product.master_category_id = master_category.id ").Where("master_product.id = ?", id).Scan(&masterProduct).Error
 
 	return masterProduct, error
+}
+
+func (repo *repository) DeleteMasterProduct(id int) error {
+	var masterProduct []model.MasterProduct
+
+	query := fmt.Sprintf("UPDATE master_product SET is_active = 0 WHERE id = %d", id)
+	error := repo.db.Raw(query).Scan(&masterProduct).Error
+
+	return error
 }
