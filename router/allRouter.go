@@ -45,6 +45,9 @@ func AllRouter(db *gorm.DB) {
 	roleService := service.RoleService(repository)
 	roleController := controller.RoleController(roleService)
 
+	inboundService := service.InboundService(repository, repository, repository)
+	inboundController := controller.InboundController(inboundService, db)
+
 	root := router.Group("/")
 	{
 		masterCategory := root.Group("/master-category")
@@ -85,6 +88,11 @@ func AllRouter(db *gorm.DB) {
 			role.GET("/", roleController.ReadRole)
 			role.PUT("/:id", roleController.UpdateRole)
 			role.DELETE("/:id", roleController.DeleteRole)
+		}
+
+		inbound := root.Group("/inbound")
+		{
+			inbound.POST("/", inboundController.CreateInbound)
 		}
 	}
 
