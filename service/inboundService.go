@@ -6,12 +6,12 @@ import (
 	"svc-warehouse/repository"
 	"time"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type InboundServiceInterface interface {
 	CreateInbound(request *model.InboundRequest, db *gorm.DB) ([]model.InboundRequest, error)
+	ReadInbound() ([]model.Inbound, error)
 }
 
 type inboundService struct {
@@ -30,7 +30,6 @@ func (service *inboundService) CreateInbound(request *model.InboundRequest, db *
 	now := time.Now()
 	request.CreatedAt = now
 	request.UpdatedAt = now
-	request.InboundNumber = now.Format("2006-01-02") + "-" + uuid.NewString()
 
 	dbTrx := db.Begin()
 	inbound, error := service.inboundRepository.CreateInbound(&request.Inbound, dbTrx)
@@ -79,4 +78,11 @@ func (service *inboundService) CreateInbound(request *model.InboundRequest, db *
 	dbTrx.Commit()
 
 	return result, error
+}
+
+func (service *inboundService) ReadInbound() ([]model.Inbound, error) {
+
+	inbound, error := service.inboundRepository.ReadInbound()
+
+	return inbound, error
 }

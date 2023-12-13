@@ -78,3 +78,41 @@ func (controller *inboundController) CreateInbound(context *gin.Context) {
 		}
 	}
 }
+
+func (controller *inboundController) ReadInbound(context *gin.Context) {
+
+	description := []string{}
+	httpStatus := http.StatusOK
+	var standardResponse *model.StandardResponse
+
+	inbound, error := controller.inboundService.ReadInbound()
+
+	if error == nil {
+
+		description = append(description, "Success")
+		httpStatus = http.StatusOK
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.GetInboundReponse{
+			StandardResponse: *standardResponse,
+			Result:           inbound,
+		})
+
+	} else {
+
+		description = append(description, error.Error())
+		httpStatus = http.StatusBadRequest
+
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.GetInboundReponse{
+			StandardResponse: *standardResponse,
+			Result:           inbound,
+		})
+
+	}
+}

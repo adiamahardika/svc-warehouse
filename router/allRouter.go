@@ -93,6 +93,7 @@ func AllRouter(db *gorm.DB) {
 		inbound := root.Group("/inbound")
 		{
 			inbound.POST("/", inboundController.CreateInbound)
+			inbound.GET("/", inboundController.ReadInbound)
 		}
 	}
 
