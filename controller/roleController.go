@@ -246,5 +246,4 @@ func (controller *roleController) DeleteRole(context *gin.Context) {
 			StandardResponse: *standardResponse,
 		})
 	}
-
 }

@@ -12,6 +12,7 @@ import (
 type ReservationServiceInterface interface {
 	CreateReservation(request *model.ReservationRequest, db *gorm.DB) ([]model.ReservationRequest, error)
 	ReadReservation() ([]model.Reservation, error)
+	ReadReservationById(id int) ([]model.ReservationRequest, error)
 }
 
 type reservationService struct {
@@ -76,4 +77,25 @@ func (service *reservationService) ReadReservation() ([]model.Reservation, error
 	reservation, error := service.reservationRepository.ReadReservation()
 
 	return reservation, error
+}
+
+func (service *reservationService) ReadReservationById(id int) ([]model.ReservationRequest, error) {
+
+	reservation, error := service.reservationRepository.ReadReservationById(id)
+	if error != nil {
+		return nil, error
+	}
+
+	reservationDetail, error := service.reservationDetailRepository.ReadReservationDetailByReservationId(id)
+	if error != nil {
+		return nil, error
+	}
+
+	result := []model.ReservationRequest{}
+	result = append(result, model.ReservationRequest{
+		Reservation:       reservation,
+		ReservationDetail: reservationDetail,
+	})
+
+	return result, error
 }

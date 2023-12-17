@@ -103,6 +103,7 @@ func AllRouter(db *gorm.DB) {
 		{
 			reservation.POST("/", reservationController.CreateReservation)
 			reservation.GET("/", reservationController.ReadReservation)
+			reservation.GET("/:id", reservationController.ReadReservationById)
 		}
 	}
 

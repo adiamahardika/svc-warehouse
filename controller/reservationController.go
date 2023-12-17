@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"svc-warehouse/model"
 	"svc-warehouse/service"
 
@@ -115,4 +116,60 @@ func (controller *reservationController) ReadReservation(context *gin.Context) {
 		})
 
 	}
+}
+
+func (controller *reservationController) ReadReservationById(context *gin.Context) {
+
+	description := []string{}
+	httpStatus := http.StatusOK
+	var standardResponse *model.StandardResponse
+
+	ids := context.Param("id")
+	id, error := strconv.Atoi(ids)
+
+	if error != nil {
+
+		errorMessage := "Id parameter must be an integer"
+		description = append(description, errorMessage)
+
+		httpStatus = http.StatusBadRequest
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.ReservationResponse{
+			StandardResponse: *standardResponse,
+		})
+
+	}
+
+	reservation, error := controller.reservationService.ReadReservationById(id)
+
+	if error == nil {
+
+		description = append(description, "Success")
+		httpStatus = http.StatusOK
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.ReservationResponse{
+			StandardResponse: *standardResponse,
+			Result:           reservation,
+		})
+
+	} else {
+
+		description = append(description, error.Error())
+		httpStatus = http.StatusBadRequest
+
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.ReservationResponse{
+			StandardResponse: *standardResponse,
+		})
+	}
+
 }
