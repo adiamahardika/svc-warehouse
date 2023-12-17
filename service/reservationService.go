@@ -11,6 +11,7 @@ import (
 
 type ReservationServiceInterface interface {
 	CreateReservation(request *model.ReservationRequest, db *gorm.DB) ([]model.ReservationRequest, error)
+	ReadReservation() ([]model.Reservation, error)
 }
 
 type reservationService struct {
@@ -68,4 +69,11 @@ func (service *reservationService) CreateReservation(request *model.ReservationR
 	})
 	dbTrx.Commit()
 	return result, error
+}
+
+func (service *reservationService) ReadReservation() ([]model.Reservation, error) {
+
+	reservation, error := service.reservationRepository.ReadReservation()
+
+	return reservation, error
 }

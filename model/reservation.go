@@ -20,3 +20,8 @@ type ReservationResponse struct {
 	StandardResponse
 	Result []ReservationRequest `json:"result,omitempty"`
 }
+
+type GetReservationReponse struct {
+	StandardResponse
+	Result []Reservation `json:"result,omitempty"`
+}

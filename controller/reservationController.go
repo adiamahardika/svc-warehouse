@@ -78,3 +78,41 @@ func (controller *reservationController) CreateReservation(context *gin.Context)
 		}
 	}
 }
+
+func (controller *reservationController) ReadReservation(context *gin.Context) {
+
+	description := []string{}
+	httpStatus := http.StatusOK
+	var standardResponse *model.StandardResponse
+
+	reservation, error := controller.reservationService.ReadReservation()
+
+	if error == nil {
+
+		description = append(description, "Success")
+		httpStatus = http.StatusOK
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.GetReservationReponse{
+			StandardResponse: *standardResponse,
+			Result:           reservation,
+		})
+
+	} else {
+
+		description = append(description, error.Error())
+		httpStatus = http.StatusBadRequest
+
+		standardResponse = &model.StandardResponse{
+			HttpStatus:  httpStatus,
+			Description: description,
+		}
+		context.JSON(httpStatus, model.GetReservationReponse{
+			StandardResponse: *standardResponse,
+			Result:           reservation,
+		})
+
+	}
+}
