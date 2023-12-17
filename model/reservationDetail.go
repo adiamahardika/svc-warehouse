@@ -1,0 +1,17 @@
+package model
+
+import "time"
+
+type ReservationDetail struct {
+	ID              int       `json:"id" gorm:"primaryKey"`
+	ReservationId   int       `json:"reservation_id" binding:"required"`
+	MasterProductId int       `json:"master_product_id"`
+	Quantity        int       `json:"quantity"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
+}
+
+type ReservationDetailResponse struct {
+	StandardResponse
+	Result []ReservationDetail `json:"result,omitempty"`
+}

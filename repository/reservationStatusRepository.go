@@ -3,6 +3,8 @@ package repository
 import (
 	"fmt"
 	"svc-warehouse/model"
+
+	"gorm.io/gorm"
 )
 
 type ReservationStatusRepostoryInterface interface {
@@ -11,6 +13,7 @@ type ReservationStatusRepostoryInterface interface {
 	UpdateReservationStatus(id int, request *model.ReservationStatus) error
 	ReadDetailReservationStatus(id int) ([]model.ReservationStatus, error)
 	DeleteReservationStatus(id int) error
+	ReadReservationStatusByName(name string, db *gorm.DB) (model.ReservationStatus, error)
 }
 
 func (repo *repository) CreateReservationStatus(request *model.ReservationStatus) ([]model.ReservationStatus, error) {
@@ -53,4 +56,12 @@ func (repo *repository) DeleteReservationStatus(id int) error {
 	error := repo.db.Raw(query).Scan(&reservationStatus).Error
 
 	return error
+}
+
+func (repo *repository) ReadReservationStatusByName(name string, db *gorm.DB) (model.ReservationStatus, error) {
+	var reservationStatus model.ReservationStatus
+
+	error := db.Table("reservation_status").Where("name = ? AND is_active = ?", name, 1).Find(&reservationStatus).Error
+
+	return reservationStatus, error
 }
