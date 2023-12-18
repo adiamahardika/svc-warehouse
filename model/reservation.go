@@ -6,6 +6,7 @@ type Reservation struct {
 	ID                  int       `json:"id" gorm:"primaryKey"`
 	ReservationNumber   string    `json:"reservation_number" gorm:"unique" binding:"required"`
 	ReservationStatusId int       `json:"reservation_status_id"`
+	ReservationStatus   string    `json:"reservation_status" gorm:"<-:false"`
 	Description         string    `json:"description"`
 	CreatedBy           int       `json:"created_by" binding:"required"`
 	CreatedAt           time.Time `json:"created_at"`
