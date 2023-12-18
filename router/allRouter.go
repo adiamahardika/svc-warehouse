@@ -39,6 +39,9 @@ func AllRouter(db *gorm.DB) {
 	productStatusService := service.ProductStatusService(repository)
 	productStatusController := controller.ProductStatusController(productStatusService)
 
+	productService := service.ProductService(repository)
+	productController := controller.ProductController(productService)
+
 	reservationStatusService := service.ReservationStatusService(repository)
 	reservationStatusController := controller.ReservationStatusController(reservationStatusService)
 
@@ -78,6 +81,11 @@ func AllRouter(db *gorm.DB) {
 			productStatus.GET("/", productStatusController.ReadProductStatus)
 			productStatus.PUT("/:id", productStatusController.UpdateProductStatus)
 			productStatus.DELETE("/:id", productStatusController.DeleteProductStatus)
+		}
+
+		product := root.Group("/product")
+		{
+			product.GET("/", productController.ReadProduct)
 		}
 
 		reservationStatus := root.Group("/reservation-status")
