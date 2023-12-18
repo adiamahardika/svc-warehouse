@@ -51,7 +51,7 @@ func AllRouter(db *gorm.DB) {
 	reservationService := service.ReservationService(repository, repository, repository)
 	reservationController := controller.ReservationController(reservationService, db)
 
-	approvalService := service.ApprovalService(repository, repository)
+	approvalService := service.ApprovalService(repository, repository, repository)
 	approvalController := controller.ApprovalController(approvalService, db)
 
 	root := router.Group("/")

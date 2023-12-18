@@ -29,7 +29,7 @@ func (controller *approvalController) CreateApproval(context *gin.Context) {
 	description := []string{}
 	httpStatus := http.StatusOK
 	var standardResponse *model.StandardResponse
-	fmt.Println(request)
+
 	if error != nil {
 
 		for _, value := range error.(validator.ValidationErrors) {

@@ -18,10 +18,11 @@ type ApprovalServiceInterface interface {
 type approvalService struct {
 	approvalRepository       repository.ApprovalRepostoryInterface
 	approvalDetailRepository repository.ApprovalDetailRepostoryInterface
+	reservationRepository    repository.ReservationRepostoryInterface
 }
 
-func ApprovalService(approvalRepository repository.ApprovalRepostoryInterface, approvalDetailRepository repository.ApprovalDetailRepostoryInterface) *approvalService {
-	return &approvalService{approvalRepository, approvalDetailRepository}
+func ApprovalService(approvalRepository repository.ApprovalRepostoryInterface, approvalDetailRepository repository.ApprovalDetailRepostoryInterface, reservationRepository repository.ReservationRepostoryInterface) *approvalService {
+	return &approvalService{approvalRepository, approvalDetailRepository, reservationRepository}
 }
 
 func (service *approvalService) CreateApproval(request *model.ApprovalRequest, db *gorm.DB) ([]model.ApprovalRequest, error) {
@@ -31,6 +32,16 @@ func (service *approvalService) CreateApproval(request *model.ApprovalRequest, d
 
 	dbTrx := db.Begin()
 	approval, error := service.approvalRepository.CreateApproval(&request.Approval, dbTrx)
+	if error != nil {
+		fmt.Println(error)
+		dbTrx.Rollback()
+		return nil, error
+	}
+
+	error = service.reservationRepository.UpdateReservation(request.ReservationId, &model.Reservation{
+		ReservationStatusId: request.ReservationStatusId,
+		UpdatedAt:           now,
+	}, dbTrx)
 	if error != nil {
 		fmt.Println(error)
 		dbTrx.Rollback()
