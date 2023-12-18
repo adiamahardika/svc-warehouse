@@ -51,6 +51,9 @@ func AllRouter(db *gorm.DB) {
 	reservationService := service.ReservationService(repository, repository, repository)
 	reservationController := controller.ReservationController(reservationService, db)
 
+	approvalService := service.ApprovalService(repository, repository)
+	approvalController := controller.ApprovalController(approvalService, db)
+
 	root := router.Group("/")
 	{
 		masterCategory := root.Group("/master-category")
@@ -104,6 +107,13 @@ func AllRouter(db *gorm.DB) {
 			reservation.POST("/", reservationController.CreateReservation)
 			reservation.GET("/", reservationController.ReadReservation)
 			reservation.GET("/:id", reservationController.ReadReservationById)
+		}
+
+		approval := root.Group("/approval")
+		{
+			approval.POST("/", approvalController.CreateApproval)
+			approval.GET("/", approvalController.ReadApproval)
+			approval.GET("/:id", approvalController.ReadApprovalById)
 		}
 	}
 

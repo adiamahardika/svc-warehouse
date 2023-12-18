@@ -12,18 +12,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type reservationController struct {
-	reservationService service.ReservationServiceInterface
-	db                 *gorm.DB
+type approvalController struct {
+	approvalService service.ApprovalServiceInterface
+	db              *gorm.DB
 }
 
-func ReservationController(reservationService service.ReservationServiceInterface, db *gorm.DB) *reservationController {
-	return &reservationController{reservationService, db}
+func ApprovalController(approvalService service.ApprovalServiceInterface, db *gorm.DB) *approvalController {
+	return &approvalController{approvalService, db}
 }
 
-func (controller *reservationController) CreateReservation(context *gin.Context) {
+func (controller *approvalController) CreateApproval(context *gin.Context) {
 
-	var request *model.ReservationRequest
+	var request *model.ApprovalRequest
 
 	error := context.ShouldBind(&request)
 	description := []string{}
@@ -42,13 +42,13 @@ func (controller *reservationController) CreateReservation(context *gin.Context)
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.ReservationResponse{
+		context.JSON(httpStatus, model.ApprovalResponse{
 			StandardResponse: *standardResponse,
 		})
 
 	} else {
 
-		reservation, error := controller.reservationService.CreateReservation(request, controller.db)
+		approval, error := controller.approvalService.CreateApproval(request, controller.db)
 
 		if error == nil {
 
@@ -58,9 +58,9 @@ func (controller *reservationController) CreateReservation(context *gin.Context)
 				HttpStatus:  httpStatus,
 				Description: description,
 			}
-			context.JSON(httpStatus, model.ReservationResponse{
+			context.JSON(httpStatus, model.ApprovalResponse{
 				StandardResponse: *standardResponse,
-				Result:           reservation,
+				Result:           approval,
 			})
 
 		} else {
@@ -72,21 +72,21 @@ func (controller *reservationController) CreateReservation(context *gin.Context)
 				HttpStatus:  httpStatus,
 				Description: description,
 			}
-			context.JSON(httpStatus, model.ReservationResponse{
+			context.JSON(httpStatus, model.ApprovalResponse{
 				StandardResponse: *standardResponse,
-				Result:           reservation,
+				Result:           approval,
 			})
 		}
 	}
 }
 
-func (controller *reservationController) ReadReservation(context *gin.Context) {
+func (controller *approvalController) ReadApproval(context *gin.Context) {
 
 	description := []string{}
 	httpStatus := http.StatusOK
 	var standardResponse *model.StandardResponse
 
-	reservation, error := controller.reservationService.ReadReservation()
+	approval, error := controller.approvalService.ReadApproval()
 
 	if error == nil {
 
@@ -96,9 +96,9 @@ func (controller *reservationController) ReadReservation(context *gin.Context) {
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.GetReservationReponse{
+		context.JSON(httpStatus, model.GetApprovalReponse{
 			StandardResponse: *standardResponse,
-			Result:           reservation,
+			Result:           approval,
 		})
 
 	} else {
@@ -110,15 +110,15 @@ func (controller *reservationController) ReadReservation(context *gin.Context) {
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.GetReservationReponse{
+		context.JSON(httpStatus, model.GetApprovalReponse{
 			StandardResponse: *standardResponse,
-			Result:           reservation,
+			Result:           approval,
 		})
 
 	}
 }
 
-func (controller *reservationController) ReadReservationById(context *gin.Context) {
+func (controller *approvalController) ReadApprovalById(context *gin.Context) {
 
 	description := []string{}
 	httpStatus := http.StatusOK
@@ -137,13 +137,13 @@ func (controller *reservationController) ReadReservationById(context *gin.Contex
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.ReservationResponse{
+		context.JSON(httpStatus, model.ApprovalResponse{
 			StandardResponse: *standardResponse,
 		})
 
 	}
 
-	reservation, error := controller.reservationService.ReadReservationById(id)
+	approval, error := controller.approvalService.ReadApprovalById(id)
 
 	if error == nil {
 
@@ -153,9 +153,9 @@ func (controller *reservationController) ReadReservationById(context *gin.Contex
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.ReservationResponse{
+		context.JSON(httpStatus, model.ApprovalResponse{
 			StandardResponse: *standardResponse,
-			Result:           reservation,
+			Result:           approval,
 		})
 
 	} else {
@@ -167,7 +167,7 @@ func (controller *reservationController) ReadReservationById(context *gin.Contex
 			HttpStatus:  httpStatus,
 			Description: description,
 		}
-		context.JSON(httpStatus, model.ReservationResponse{
+		context.JSON(httpStatus, model.ApprovalResponse{
 			StandardResponse: *standardResponse,
 		})
 	}
